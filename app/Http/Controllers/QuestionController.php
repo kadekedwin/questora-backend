@@ -21,23 +21,12 @@ class QuestionController extends Controller
         $request->validate([
             'quiz_id' => 'required|exists:quizzes,id',
             'question_text' => 'required|string',
-            'options' => 'required|array|min:2',
-            'options.*.option_text' => 'required|string',
-            'options.*.is_correct' => 'required|boolean',
         ]);
 
         $question = Question::create([
             'quiz_id' => $request->quiz_id,
             'question_text' => $request->question_text,
         ]);
-
-        foreach ($request->options as $opt) {
-            QuestionOption::create([
-                'question_id' => $question->id,
-                'option_text' => $opt['option_text'],
-                'is_correct' => $opt['is_correct']
-            ]);
-        }
 
         return response()->json(['message' => 'Question added successfully', 'question' => $question->load('options')]);
     }

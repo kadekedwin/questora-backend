@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
+    // Get questions by quiz
+    public function index($quiz_id)
+    {
+        $questions = Question::where('quiz_id', $quiz_id)->with('options')->get();
+        return response()->json($questions);
+    }
+
     // Add a question and its options
     public function store(Request $request)
     {

@@ -27,10 +27,14 @@ class QuizController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'duration' => 'required|integer|min:1',
-            'created_by' => 'required|exists:users,id'
         ]);
 
-        $quiz = Quiz::create($request->all());
+        $quiz = Quiz::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'duration' => $request->duration,
+            'created_by' => auth()->id(),
+        ]);
         return response()->json($quiz, 201);
     }
 
